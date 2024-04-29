@@ -13,6 +13,6 @@ COPY entrypoint.sh /
 RUN chmod a+x /entrypoint.sh
 
 EXPOSE 3128
-RUN mkdir -p /var/cache/squid && chown proxy -R /var/cache/squid
+RUN mkdir -p /var/squid/cache && chown proxy -R /var/squid/cache
 
 ENTRYPOINT ["/entrypoint.sh"]
