@@ -4,6 +4,8 @@ on:
   push:
     branches:
     - 'master'
+    paths:
+    - basic-auth
 
 jobs:
   release_job:
