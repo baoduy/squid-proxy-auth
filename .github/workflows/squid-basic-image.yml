@@ -5,7 +5,7 @@ on:
     branches:
     - 'master'
     paths:
-    - basic-auth
+    - basic-auth/**
 
 jobs:
   release_job:
