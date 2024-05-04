@@ -18,7 +18,7 @@ if [[ "${LDAP_SERVER:-none}" != "none" && "${LDAP_DN_PASSWORD:-none}" != "none" 
 	chown root "$pass_file"
 	chmod 600 "$pass_file"
 
-	echo "auth_param basic program /usr/lib/squid/basic_ldap_auth -b \"${LDAP_USERS_GROUPS}\" -D \"${LDAP_DN_USER}\" -W $pass_file -f \"userid=%s\" -H ${LDAP_SERVER}" | sed -i '/# LDAP_AUTH/ r /dev/stdin' /etc/squid/squid.conf
+	echo "auth_param basic program /usr/lib/squid/basic_ldap_auth -b \"${LDAP_USERS_GROUPS}\" -D \"${LDAP_DN_USER}\" -W $pass_file -f \"cn=%s\" -H ${LDAP_SERVER}" | sed -i '/# LDAP_AUTH/ r /dev/stdin' /etc/squid/squid.conf
 else
 	echo "Need to provide the environment variables for LDAP Auth."
 	exit 1
