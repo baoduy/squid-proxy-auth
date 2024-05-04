@@ -2,9 +2,9 @@ FROM --platform=$BUILDPLATFORM ubuntu/squid:latest
 ARG TARGETARCH
 ARG BUILDPLATFORM
 
-#RUN rm -rf /var/lib/apt/lists/*
-#RUN apt-get -qqy update
-#RUN apt-get -qqy upgrade
+RUN rm -rf /var/lib/apt/lists/*
+RUN apt-get -qqy update
+RUN apt-get -qqy upgrade
 RUN apt-get -qqy install apache2-utils
 #RUN apt-get -qqy install squid
 
