@@ -9,8 +9,8 @@ jobs:
   release_job:
     uses: baoduy/ShareWorkflows/.github/workflows/docker-publish.yaml@main
     with:
-      dockerFile: 'Dockerfile.basic'
-      context: '.'
+      dockerFile: 'basic-auth/Dockerfile'
+      context: './basic-auth'
       imageName: 'baoduy2412/squid-basic-auth'
       platforms: linux/arm64,linux/amd64
     secrets:
