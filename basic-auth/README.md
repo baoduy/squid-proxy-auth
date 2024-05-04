@@ -1,6 +1,3 @@
-Here's an improved version of the [README.md](file:///Volumes/VMs_2T/_SINGA/squid-proxy-auth/README.md#1%2C1-1%2C1) for clarity, formatting, and additional guidance:
-
-```markdown
 # Authentication Squid Docker
 
 This is a minimal Docker image with [Squid](http://www.squid-cache.org/) configured to proxy only authenticated requests and, optionally, restrict access to specific domains.
@@ -59,11 +56,3 @@ The Docker image supports several environment variables for customization:
 ## License
 
 This project is licensed under the MIT License.
-```
-
-### Improvements Made:
-- Added a link to the Squid official website for users unfamiliar with Squid.
-- Provided clearer instructions for building and running the Docker container.
-- Improved formatting for better readability.
-- Added more explicit instructions and details in the Environment Variables section.
-- Added a brief description at the beginning to explain what the Docker image does.
