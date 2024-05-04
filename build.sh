@@ -1,1 +1,1 @@
-docker build -f Dockerfile -t baoduy2412/squid-auth:latest .
+docker build -f Dockerfile.basic -t baoduy2412/squid-auth:latest .

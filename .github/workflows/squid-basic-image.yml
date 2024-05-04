@@ -3,15 +3,15 @@ name: Build-Docker
 on:
   push:
     branches:
-      - 'master'
+    - 'master'
 
 jobs:
   release_job:
     uses: baoduy/ShareWorkflows/.github/workflows/docker-publish.yaml@main
     with:
-      dockerFile: 'Dockerfile'
+      dockerFile: 'Dockerfile.basic'
       context: '.'
-      imageName: 'baoduy2412/squid-auth'
+      imageName: 'baoduy2412/squid-basic-auth'
       platforms: linux/arm64,linux/amd64
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}

@@ -1,19 +1,10 @@
 #!/bin/bash -eux
 
-# Find Squid's process ID (PID) and kill it
-#squid_pid="$(pgrep squid)"
-#echo "$squid_pid"
-#if [ -n "$squid_pid" ]; then
-#    echo "Stopping existing Squid process..."
-#    kill "$squid_pid"
-#    # Optionally, wait a moment to ensure the process has been stopped
-#    sleep 2
-#fi
-
-mkdir -p /var/squid/cache
-mkdir -p /var/squid/logs
+# Ensure necessary directories exist and set proper permissions
+mkdir -p /var/squid/cache /var/squid/logs
 chown proxy -R /var/squid
 
+# Check for required environment variables and configure authentication
 if [[ "${PROXY_PASSWORD:-none}" != "none" && "${PROXY_USERNAME:-none}" != "none" ]]; then
 	htpasswd -mbc /etc/squid/passwd "${PROXY_USERNAME}" "${PROXY_PASSWORD}"
 else
@@ -21,33 +12,45 @@ else
 	exit 1
 fi
 
-if grep -q BLOCKLIST /etc/squid/squid.conf; then
-	result=""
-	if [[ "${PROXY_ALLOWED_DSTDOMAINS:-x}" != "x" ]]; then
-		arr=$(echo $PROXY_ALLOWED_DSTDOMAINS | tr ",;" "\n\n")
-		for dstdomain in $arr; do
-			result=$(echo -e "$result    acl allowedDomains dstdomain $dstdomain\n")
-		done
-	else
-		echo "You may provide PROXY_ALLOWED_DSTDOMAINS environment variable to limit which domains are accessible"
-	fi
-	if [[ "${PROXY_ALLOWED_DSTDOMAINS_REGEX:-x}" != "x" ]]; then
-		result=$(echo -e "$result    acl allowedDomains dstdom_regex $PROXY_ALLOWED_DSTDOMAINS_REGEX\n")
-	else
-		echo "You may provide PROXY_ALLOWED_DSTDOMAINS_REGEX environment variable to limit which domains are accessible"
-	fi
-	if [[ "$result" == "" ]]; then
-		sed '/allowedDomains/d' -i /etc/squid/squid.conf
-	fi
-	sed "s/BLOCKLIST/$result/g" -i /etc/squid/squid.conf
-	cat /etc/squid/squid.conf
-fi	
+# Handle domain whitelisting
+result=""
+if [[ "${PROXY_ALLOWED_DSTDOMAINS:-x}" != "x" ]]; then
+	arr=$(echo $PROXY_ALLOWED_DSTDOMAINS | tr ",;" "\n\n")
+	for dstdomain in $arr; do
+		result=$(echo -e "$result acl whitelist dstdomain $dstdomain\n")
+	done
+else
+	echo "You may provide PROXY_ALLOWED_DSTDOMAINS environment variable to limit which domains are accessible"
+fi
 
+# Handle regex-based domain whitelisting
+if [[ "${PROXY_ALLOWED_DSTDOMAINS_REGEX:-x}" != "x" ]]; then
+	result=$(echo -e "$result acl whitelist dstdom_regex $PROXY_ALLOWED_DSTDOMAINS_REGEX\n")
+else
+	echo "You may provide PROXY_ALLOWED_DSTDOMAINS_REGEX environment variable to limit which domains are accessible"
+fi
+
+# Update squid configuration if any rules are defined
+if [[ -n "$result" ]]; then
+    echo "$result"
+    # Insert ACL rules into squid.conf
+    echo "$result" | sed -i '/# WHITELIST_ACL/ r /dev/stdin' /etc/squid/squid.conf
+	echo "http_access allow authenticated whitelist" | sed -i '/# WHITELIST_ACCESS/ r /dev/stdin' /etc/squid/squid.conf
+else
+    echo "http_access allow authenticated" | sed -i '/# WHITELIST_ACCESS/ r /dev/stdin' /etc/squid/squid.conf
+fi
+
+# cat /etc/squid/squid.conf
+
+# Initialize and start Squid
 /usr/sbin/squid -z
 rm -f /var/run/squid.pid
 
-if [[ "${PROXY_DEBUG:-x}" != "x" ]]; then
-	/usr/sbin/squid -N -d 1
+# Start Squid with or without debug mode based on environment variable
+if [[ "${PROXY_DEBUG:-}" == "1" ]]; then
+    echo "Starting Squid in debug mode..."
+    /usr/sbin/squid -N -d 1
 else
-	/usr/sbin/squid -N
+    echo "Starting Squid..."
+    /usr/sbin/squid -N
 fi
