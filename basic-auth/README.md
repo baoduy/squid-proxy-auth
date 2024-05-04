@@ -12,7 +12,7 @@ docker build -t baoduy2412/squid-basic-auth:latest -f Dockerfile.basic .
 
 ### Creating and Running the Container
 
-Create and start the container using the `squid-auth:1.0` image:
+Start the container using the bellow command:
 
 ```bash
 docker run -d -e PROXY_USERNAME=baoduy2412 -e PROXY_PASSWORD=password -p 3128:3128 baoduy2412/squid-basic-auth:latest
