@@ -8,7 +8,7 @@ on:
     - basic-auth/**
 
 jobs:
-  release_job:
+  docker_job:
     uses: baoduy/ShareWorkflows/.github/workflows/docker-publish.yaml@main
     with:
       dockerFile: 'basic-auth/Dockerfile'
@@ -18,3 +18,15 @@ jobs:
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+
+  github_job:
+    uses: baoduy/ShareWorkflows/.github/workflows/docker-publish.yaml@main
+    with:
+      dockerFile: 'basic-auth/Dockerfile'
+      context: './basic-auth'
+      imageName: 'ghcr.io/squid-proxy-auth'
+      platforms: linux/arm64,linux/amd64
+      DOCKER_REGISTRY: ghcr.io
+    secrets:
+      DOCKER_USERNAME: ${{ github.actor }}
+      DOCKER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
