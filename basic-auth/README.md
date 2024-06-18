@@ -56,3 +56,6 @@ The Docker image supports several environment variables for customization:
 ## License
 
 This project is licensed under the MIT License.
+
+Thanks
+Steven
