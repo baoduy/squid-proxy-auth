@@ -54,4 +54,5 @@ The Docker image supports several environment variables for customization:
      - If not set, Squid runs in non-daemon mode without debug output.
 
 ## License
+
 This project is licensed under the MIT License.
