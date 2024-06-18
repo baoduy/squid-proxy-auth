@@ -53,7 +53,7 @@ The Docker image supports several environment variables for customization:
      - If set (`PROXY_DEBUG=1`), Squid runs in non-daemon mode with debug output.
      - If not set, Squid runs in non-daemon mode without debug output.
 
-## License
+## Licenses
 
 This project is licensed under the MIT License.
 
