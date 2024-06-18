@@ -24,7 +24,7 @@ jobs:
     with:
       dockerFile: 'basic-auth/Dockerfile'
       context: './basic-auth'
-      imageName: 'ghcr.io/squid-proxy-auth'
+      imageName: ghcr.io/${{ github.repository }}
       platforms: linux/arm64,linux/amd64
       DOCKER_REGISTRY: ghcr.io
     secrets:
