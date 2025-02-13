@@ -1,4 +1,4 @@
-# Authentication Squid Docker
+# Squid On Docker
 
 This is a minimal Docker image with [Squid](http://www.squid-cache.org/) configured to proxy only authenticated requests and, optionally, restrict access to specific domains.
 
