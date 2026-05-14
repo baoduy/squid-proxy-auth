@@ -1,8 +1,8 @@
-#!/bin/bash -eux
+#!/bin/bash -eu
 
 # Ensure necessary directories exist and set proper permissions
 mkdir -p /var/squid/cache /var/squid/logs
-chown proxy -R /var/squid
+chown proxy:proxy -R /var/squid
 
 # Check for required environment variables and configure authentication
 if [[ "${PROXY_PASSWORD:-none}" != "none" && "${PROXY_USERNAME:-none}" != "none" ]]; then
