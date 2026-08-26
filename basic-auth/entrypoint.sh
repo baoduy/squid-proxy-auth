@@ -2,7 +2,7 @@
 
 # Ensure necessary directories exist and set proper permissions
 mkdir -p /var/squid/cache /var/squid/logs
-chown proxy:proxy -R /var/squid
+chown squid:squid -R /var/squid
 
 # Check for required environment variables and configure authentication
 if [[ "${PROXY_PASSWORD:-none}" != "none" && "${PROXY_USERNAME:-none}" != "none" ]]; then
@@ -43,7 +43,7 @@ fi
 # cat /etc/squid/squid.conf
 
 # Initialize and start Squid
-/usr/sbin/squid -z
+/usr/sbin/squid -z --foreground
 rm -f /var/run/squid.pid
 
 # Start Squid with or without debug mode based on environment variable
